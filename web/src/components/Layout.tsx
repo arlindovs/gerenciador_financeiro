@@ -126,6 +126,14 @@ export default function Layout() {
                     >
                         {theme === 'light' ? <Sun className="w-5 h-5" /> : theme === 'dark' ? <Moon className="w-5 h-5" /> : <Heart className="w-5 h-5" />}
                     </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-full w-10 h-10 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        onClick={handleLogout}
+                    >
+                        <LogOut className="w-5 h-5" />
+                    </Button>
                 </div>
             </header>
 
