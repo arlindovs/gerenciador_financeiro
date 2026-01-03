@@ -23,7 +23,8 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     : [
         'http://localhost:5173',
         'https://gerenciador-financeiro-steel.vercel.app',
-        'https://gerenciador-financeiro-f13j.vercel.app'
+        'https://gerenciador-financeiro-f13j.vercel.app',
+        'https://gerenciador-financeiro-sage.vercel.app'
     ]
 
 // Security middleware
@@ -32,6 +33,14 @@ app.use(helmet({
     contentSecurityPolicy: false, // Disable for Swagger UI
     crossOriginEmbedderPolicy: false
 }))
+
+// Request logger for debugging on Vercel
+// Logger de requisições para depuração na Vercel
+app.use((req, _res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
 
 // Rate limiting to prevent abuse
 // Limitação de taxa para prevenir abuso
@@ -101,9 +110,18 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 
 // 404 handler
 // Tratamento de 404
-app.use((_req: Request, res: Response) => {
-    res.status(404).json({ error: 'Endpoint not found' })
+app.use((req: Request, res: Response) => {
+    console.log(`[404] Unmatched route: ${req.method} ${req.url}`);
+    res.status(404).json({
+        error: 'Endpoint not found',
+        debug: {
+            method: req.method,
+            url: req.url,
+            path: req.path
+        }
+    })
 })
+
 
 // Start server only in development (not in Vercel production)
 // Inicia servidor apenas em desenvolvimento (não na produção Vercel)
