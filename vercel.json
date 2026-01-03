@@ -18,11 +18,5 @@
             "source": "/api/:path*",
             "destination": "/server/src/index.ts"
         }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/server/src/index.ts"
-        }
     ]
 }
