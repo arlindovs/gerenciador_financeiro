@@ -124,10 +124,10 @@ export function KPIs({ transactions }: KPIProps) {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className={`text-3xl font-black tracking-tighter ${idx === 2 ? kpi.color : 'text-foreground'}`}>
+                            <div className={`text-xl sm:text-2xl md:text-3xl font-black tracking-tighter ${idx === 2 ? kpi.color : 'text-foreground'}`}>
                                 <CountUp value={kpi.value} prefix={kpi.prefix} suffix={kpi.suffix} decimals={kpi.title.includes('Economia') ? 1 : 2} />
                             </div>
-                            <p className="text-xs text-muted-foreground mt-1 font-medium">{kpi.subtitle}</p>
+                            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 font-medium">{kpi.subtitle}</p>
                         </CardContent>
                     </Card>
                 </motion.div>

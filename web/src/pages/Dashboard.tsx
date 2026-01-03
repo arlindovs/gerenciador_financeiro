@@ -126,26 +126,26 @@ export default function Dashboard() {
                             <div className="grid grid-cols-2 gap-6">
                                 <motion.div
                                     whileHover={{ y: -5 }}
-                                    className="p-6 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/10 space-y-2 shadow-inner"
+                                    className="p-4 sm:p-6 bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-[2rem] border border-white/10 space-y-1.5 sm:space-y-2 shadow-inner"
                                 >
                                     <div className="flex items-center gap-2 text-emerald-300">
-                                        <ArrowUpRight className="w-4 h-4" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Entradas</span>
+                                        <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest opacity-80">Entradas</span>
                                     </div>
-                                    <p className="text-xl md:text-2xl font-black truncate">
+                                    <p className="text-base sm:text-xl md:text-2xl font-black tabular-nums">
                                         <CountUp value={income} prefix="R$ " />
                                     </p>
                                 </motion.div>
 
                                 <motion.div
                                     whileHover={{ y: -5 }}
-                                    className="p-6 bg-black/10 backdrop-blur-xl rounded-[2rem] border border-white/5 space-y-2 shadow-inner"
+                                    className="p-4 sm:p-6 bg-black/10 backdrop-blur-xl rounded-2xl sm:rounded-[2rem] border border-white/5 space-y-1.5 sm:space-y-2 shadow-inner"
                                 >
                                     <div className="flex items-center gap-2 text-rose-300">
-                                        <ArrowDownLeft className="w-4 h-4" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Saídas</span>
+                                        <ArrowDownLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest opacity-80">Saídas</span>
                                     </div>
-                                    <p className="text-xl md:text-2xl font-black truncate">
+                                    <p className="text-base sm:text-xl md:text-2xl font-black tabular-nums">
                                         <CountUp value={expense} prefix="R$ " />
                                     </p>
                                 </motion.div>

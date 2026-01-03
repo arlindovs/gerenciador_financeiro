@@ -212,45 +212,49 @@ function CategoryItem({ category, onDelete, onUpdate }: {
 
     if (isEditing) {
         return (
-            <div className="flex items-center gap-2 p-3 bg-muted/20 rounded-2xl border border-primary/20">
-                <Input
-                    value={editIcon}
-                    onChange={e => setEditIcon(e.target.value)}
-                    className="w-12 h-10 text-center rounded-xl bg-background"
-                />
-                <Input
-                    value={editName}
-                    onChange={e => setEditName(e.target.value)}
-                    className="flex-1 h-10 rounded-xl bg-background"
-                />
-                <Button size="icon" variant="ghost" onClick={() => onUpdate(category.id, editName, editIcon)} className="text-revenue hover:bg-revenue/10 rounded-xl">
-                    <Check className="w-4 h-4" />
-                </Button>
-                <Button size="icon" variant="ghost" onClick={() => setIsEditing(false)} className="text-muted-foreground rounded-xl">
-                    <X className="w-4 h-4" />
-                </Button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-3 bg-muted/20 rounded-xl sm:rounded-2xl border border-primary/20">
+                <div className="flex items-center gap-2 flex-1">
+                    <Input
+                        value={editIcon}
+                        onChange={e => setEditIcon(e.target.value)}
+                        className="w-10 sm:w-12 h-9 sm:h-10 text-center rounded-lg sm:rounded-xl bg-background flex-shrink-0"
+                    />
+                    <Input
+                        value={editName}
+                        onChange={e => setEditName(e.target.value)}
+                        className="flex-1 h-9 sm:h-10 rounded-lg sm:rounded-xl bg-background"
+                    />
+                </div>
+                <div className="flex gap-1 self-end sm:self-auto">
+                    <Button size="icon" variant="ghost" onClick={() => onUpdate(category.id, editName, editIcon)} className="h-8 w-8 sm:h-9 sm:w-9 text-revenue hover:bg-revenue/10 rounded-lg sm:rounded-xl">
+                        <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" onClick={() => setIsEditing(false)} className="h-8 w-8 sm:h-9 sm:w-9 text-muted-foreground rounded-lg sm:rounded-xl">
+                        <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </Button>
+                </div>
             </div>
         )
     }
 
     return (
-        <div className="flex items-center justify-between p-4 hover:bg-muted/30 rounded-2xl transition-all group border border-transparent hover:border-border/50">
-            <div className="flex items-center gap-4">
-                <span className="text-2xl w-10 h-10 flex items-center justify-center bg-background/50 rounded-xl shadow-inner">{category.icon || '📦'}</span>
-                <div>
-                    <p className="font-bold text-lg">{category.name}</p>
-                    <p className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 hover:bg-muted/30 rounded-2xl transition-all group border border-transparent hover:border-border/50 gap-2 sm:gap-0">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                <span className="text-xl sm:text-2xl w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-background/50 rounded-lg sm:rounded-xl shadow-inner flex-shrink-0">{category.icon || '📦'}</span>
+                <div className="min-w-0 flex-1">
+                    <p className="font-bold text-base sm:text-lg truncate">{category.name}</p>
+                    <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">
                         {category.user_id ? 'Personalizada' : 'Sistema'}
                     </p>
                 </div>
             </div>
             {category.user_id && (
-                <div className="flex items-center gap-1 transition-all">
-                    <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)} className="w-10 h-10 rounded-xl hover:bg-primary/10 hover:text-primary">
-                        <Edit2 className="w-4 h-4" />
+                <div className="flex items-center gap-1 transition-all self-end sm:self-auto flex-shrink-0">
+                    <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)} className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl hover:bg-primary/10 hover:text-primary">
+                        <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => onDelete(category.id)} className="w-10 h-10 rounded-xl hover:bg-destructive/10 hover:text-destructive">
-                        <Trash2 className="w-4 h-4" />
+                    <Button variant="ghost" size="icon" onClick={() => onDelete(category.id)} className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl hover:bg-destructive/10 hover:text-destructive">
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </Button>
                 </div>
             )}

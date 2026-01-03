@@ -108,40 +108,45 @@ export default function Transactions() {
                             />
                         </div>
 
-                        <div className="flex flex-col lg:flex-row items-center gap-4 w-full lg:w-auto">
+                        <div className="flex flex-col lg:flex-row items-center gap-3 sm:gap-4 w-full lg:w-auto">
                             {/* Modern Date Picker Simulation */}
-                            <div className="flex items-center gap-3 bg-background/50 p-2 rounded-2xl border border-border/50 shadow-inner w-full lg:w-auto">
-                                <Calendar className="w-4 h-4 text-muted-foreground ml-2" />
-                                <Input
-                                    type="date"
-                                    className="h-10 border-none bg-transparent text-xs font-black uppercase w-full lg:w-36 focus-visible:ring-0"
-                                    value={startDate}
-                                    onChange={e => setStartDate(e.target.value)}
-                                />
-                                <span className="text-border">|</span>
-                                <Input
-                                    type="date"
-                                    className="h-10 border-none bg-transparent text-xs font-black uppercase w-full lg:w-36 focus-visible:ring-0"
-                                    value={endDate}
-                                    onChange={e => setEndDate(e.target.value)}
-                                />
-                                {(startDate || endDate) && (
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-8 w-8 rounded-xl text-muted-foreground"
-                                        onClick={() => { setStartDate(''); setEndDate(''); }}
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </Button>
-                                )}
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 bg-background/50 p-2 rounded-xl sm:rounded-2xl border border-border/50 shadow-inner w-full lg:w-auto">
+                                <div className="flex items-center gap-2 w-full sm:w-auto">
+                                    <Calendar className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                                    <Input
+                                        type="date"
+                                        className="h-9 sm:h-10 border-none bg-transparent text-[11px] sm:text-xs font-black uppercase flex-1 sm:w-32 lg:w-36 focus-visible:ring-0"
+                                        value={startDate}
+                                        onChange={e => setStartDate(e.target.value)}
+                                    />
+                                </div>
+                                <span className="text-border hidden sm:block">|</span>
+                                <div className="flex items-center gap-2 w-full sm:w-auto">
+                                    <span className="text-[10px] text-muted-foreground sm:hidden">até</span>
+                                    <Input
+                                        type="date"
+                                        className="h-9 sm:h-10 border-none bg-transparent text-[11px] sm:text-xs font-black uppercase flex-1 sm:w-32 lg:w-36 focus-visible:ring-0"
+                                        value={endDate}
+                                        onChange={e => setEndDate(e.target.value)}
+                                    />
+                                    {(startDate || endDate) && (
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl text-muted-foreground flex-shrink-0"
+                                            onClick={() => { setStartDate(''); setEndDate(''); }}
+                                        >
+                                            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
 
-                            <div className="flex items-center gap-2 bg-background/50 p-2 rounded-2xl border border-border/50 shadow-inner w-full lg:w-auto overflow-x-auto whitespace-nowrap">
+                            <div className="flex items-center gap-1 sm:gap-2 bg-background/50 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl border border-border/50 shadow-inner w-full lg:w-auto">
                                 <Button
                                     variant={typeFilter === 'all' ? 'secondary' : 'ghost'}
                                     size="sm"
-                                    className={`h-10 font-black text-xs px-4 rounded-xl ${typeFilter === 'all' ? 'shadow-sm' : ''}`}
+                                    className={`h-8 sm:h-10 font-black text-[10px] sm:text-xs px-2 sm:px-4 rounded-lg sm:rounded-xl flex-1 sm:flex-none ${typeFilter === 'all' ? 'shadow-sm' : ''}`}
                                     onClick={() => setTypeFilter('all')}
                                 >
                                     Todos
@@ -149,20 +154,22 @@ export default function Transactions() {
                                 <Button
                                     variant={typeFilter === 'income' ? 'secondary' : 'ghost'}
                                     size="sm"
-                                    className={`h-10 font-black text-xs px-4 rounded-xl gap-2 ${typeFilter === 'income' ? 'shadow-sm text-revenue' : 'text-muted-foreground'}`}
+                                    className={`h-8 sm:h-10 font-black text-[10px] sm:text-xs px-2 sm:px-4 rounded-lg sm:rounded-xl gap-1 sm:gap-2 flex-1 sm:flex-none ${typeFilter === 'income' ? 'shadow-sm text-revenue' : 'text-muted-foreground'}`}
                                     onClick={() => setTypeFilter('income')}
                                 >
-                                    <ArrowUpCircle className="w-4 h-4" />
-                                    Entradas
+                                    <ArrowUpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                    <span className="hidden xs:inline">Entradas</span>
+                                    <span className="xs:hidden">+</span>
                                 </Button>
                                 <Button
                                     variant={typeFilter === 'expense' ? 'secondary' : 'ghost'}
                                     size="sm"
-                                    className={`h-10 font-black text-xs px-4 rounded-xl gap-2 ${typeFilter === 'expense' ? 'shadow-sm text-expense' : 'text-muted-foreground'}`}
+                                    className={`h-8 sm:h-10 font-black text-[10px] sm:text-xs px-2 sm:px-4 rounded-lg sm:rounded-xl gap-1 sm:gap-2 flex-1 sm:flex-none ${typeFilter === 'expense' ? 'shadow-sm text-expense' : 'text-muted-foreground'}`}
                                     onClick={() => setTypeFilter('expense')}
                                 >
-                                    <ArrowDownCircle className="w-4 h-4" />
-                                    Saídas
+                                    <ArrowDownCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                    <span className="hidden xs:inline">Saídas</span>
+                                    <span className="xs:hidden">-</span>
                                 </Button>
                             </div>
                         </div>
