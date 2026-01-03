@@ -5,6 +5,7 @@ import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard'
 import Transactions from './pages/Transactions'
 import Categories from './pages/Categories'
+import Charts from './pages/Charts'
 import Layout from './components/Layout'
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/" element={session ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/transactions" element={session ? <Transactions /> : <Navigate to="/login" />} />
           <Route path="/categories" element={session ? <Categories /> : <Navigate to="/login" />} />
+          <Route path="/charts" element={session ? <Charts /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Receipt, LogOut, Wallet, Plus, BarChart3, User, Moon, Sun, Heart } from 'lucide-react'
+import { LayoutDashboard, Receipt, LogOut, Wallet, Plus, BarChart3, Moon, Sun, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useNavigate } from 'react-router-dom'
@@ -37,10 +37,9 @@ export default function Layout() {
     const navItems = [
         { icon: LayoutDashboard, label: 'Início', path: '/' },
         { icon: Receipt, label: 'Transações', path: '/transactions' },
-        { icon: Wallet, label: 'Categorias', path: '/categories' },
         { icon: null, label: 'Add', path: 'special' }, // Centered button
+        { icon: Wallet, label: 'Categorias', path: '/categories' },
         { icon: BarChart3, label: 'Gráficos', path: '/charts' },
-        { icon: User, label: 'Perfil', path: '/profile' },
     ]
 
     if (!mounted) return null
