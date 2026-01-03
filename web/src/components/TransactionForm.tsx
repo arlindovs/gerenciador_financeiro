@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { supabase } from '@/lib/supabase'
+import { apiUrl } from '@/lib/api'
 import { Sparkles, Loader2, Calendar as CalendarIcon, Wallet, Layers, Repeat } from 'lucide-react'
 
 interface TransactionFormProps {
@@ -46,7 +47,7 @@ export default function TransactionForm({ onSuccess, user_id, initialData }: Tra
         setSuggesting(true)
         try {
             const { data: { session } } = await supabase.auth.getSession()
-            const res = await fetch('http://localhost:3000/ai/categorize', {
+            const res = await fetch(apiUrl('/ai/categorize'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,8 +73,8 @@ export default function TransactionForm({ onSuccess, user_id, initialData }: Tra
             const { data: { session } } = await supabase.auth.getSession()
             const isEditing = !!initialData?.id
             const url = isEditing
-                ? `http://localhost:3000/transactions/${initialData.id}`
-                : 'http://localhost:3000/transactions'
+                ? apiUrl(`/transactions/${initialData.id}`)
+                : apiUrl('/transactions')
 
             const res = await fetch(url, {
                 method: isEditing ? 'PUT' : 'POST',

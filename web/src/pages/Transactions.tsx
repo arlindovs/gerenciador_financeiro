@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { apiUrl } from '@/lib/api'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -46,7 +47,7 @@ export default function Transactions() {
         if (!confirm('Tem certeza que deseja excluir esta transação?')) return
 
         const { data: { session } } = await supabase.auth.getSession()
-        const res = await fetch(`http://localhost:3000/transactions/${id}`, {
+        const res = await fetch(apiUrl(`/transactions/${id}`), {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${session?.access_token}` }
         })
