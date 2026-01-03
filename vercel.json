@@ -1,18 +1,10 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "server/src/index.ts",
-            "use": "@vercel/node"
-        },
-        {
-            "src": "web/package.json",
-            "use": "@vercel/static-build",
-            "config": {
-                "distDir": "dist"
-            }
+    "functions": {
+        "server/src/index.ts": {
+            "runtime": "@vercel/node"
         }
-    ],
+    },
     "rewrites": [
         {
             "source": "/api/:path*",
@@ -20,11 +12,11 @@
         },
         {
             "source": "/assets/:path*",
-            "destination": "/web/assets/:path*"
+            "destination": "/web/dist/assets/:path*"
         },
         {
             "source": "/((?!api/).*)",
-            "destination": "/web/index.html"
+            "destination": "/web/dist/index.html"
         }
     ],
     "cleanUrls": true
