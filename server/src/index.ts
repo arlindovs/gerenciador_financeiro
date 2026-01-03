@@ -11,6 +11,7 @@ import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './swagger'
 import { transactionsRouter } from './routes/transactions'
 import { aiRouter } from './routes/ai'
+import { dadosRouter } from './routes/dados'
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -76,6 +77,12 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 
 // API Routes
 // Rotas da API
+app.use('/api/transactions', transactionsRouter)
+app.use('/api/ai', aiRouter)
+app.use('/api/dados', dadosRouter)
+
+// Also mount at root for backwards compatibility
+// Também monta na raiz para compatibilidade
 app.use('/transactions', transactionsRouter)
 app.use('/ai', aiRouter)
 
@@ -98,11 +105,14 @@ app.use((_req: Request, res: Response) => {
     res.status(404).json({ error: 'Endpoint not found' })
 })
 
-// Start server
-// Inicia servidor
-app.listen(port, () => {
-    console.log(`🚀 Express server running on port ${port}`)
-    console.log(`📚 Swagger docs available at http://localhost:${port}/swagger`)
-})
+// Start server only in development (not in Vercel production)
+// Inicia servidor apenas em desenvolvimento (não na produção Vercel)
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`🚀 Express server running on port ${port}`)
+        console.log(`📚 Swagger docs available at http://localhost:${port}/swagger`)
+    })
+}
 
 export default app
+
