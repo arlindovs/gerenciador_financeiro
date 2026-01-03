@@ -22,16 +22,7 @@ export default function Transactions() {
     const [editingTransaction, setEditingTransaction] = useState<any>(null)
     const [user, setUser] = useState<any>(null)
 
-    useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => {
-            if (data.user) {
-                setUser(data.user)
-                fetchTransactions()
-            }
-        })
-    }, [])
-
-    async function fetchTransactions() {
+    const fetchTransactions = async () => {
         setLoading(true)
         const { data } = await supabase
             .from('transactions')
@@ -41,6 +32,15 @@ export default function Transactions() {
         if (data) setTransactions(data)
         setLoading(false)
     }
+
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data }) => {
+            if (data.user) {
+                setUser(data.user)
+                fetchTransactions()
+            }
+        })
+    }, [])
 
     const handleDelete = async (id: string) => {
         if (!confirm('Tem certeza que deseja excluir esta transação?')) return

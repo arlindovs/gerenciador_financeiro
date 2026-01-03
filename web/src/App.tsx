@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Auth from './pages/Auth'
-import Dashboard from './pages/Dashboard'
-import Layout from './components/Layout'
 import { useEffect, useState } from 'react'
 import { supabase } from './lib/supabase'
-import Transactions from './pages/Transactions' // Added import for Transactions component
+import Auth from './pages/Auth'
+import Dashboard from './pages/Dashboard'
+import Transactions from './pages/Transactions'
+import Categories from './pages/Categories'
+import Layout from './components/Layout'
 
 function App() {
   const [session, setSession] = useState<any>(null)
@@ -34,6 +35,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={session ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/transactions" element={session ? <Transactions /> : <Navigate to="/login" />} />
+          <Route path="/categories" element={session ? <Categories /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
     </BrowserRouter>

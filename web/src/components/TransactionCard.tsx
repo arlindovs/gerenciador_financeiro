@@ -63,8 +63,8 @@ export default function TransactionCard({ transaction, onEdit, onDelete }: Trans
                     {isIncome ? '+' : '-'} R$ {Number(transaction.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                 </span>
 
-                {/* Desktop Hover Actions */}
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* Action Buttons (Always Visible) */}
+                <div className="flex items-center gap-1 transition-opacity">
                     <Button
                         variant="ghost"
                         size="icon"

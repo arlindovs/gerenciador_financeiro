@@ -37,6 +37,7 @@ export default function Layout() {
     const navItems = [
         { icon: LayoutDashboard, label: 'Início', path: '/' },
         { icon: Receipt, label: 'Transações', path: '/transactions' },
+        { icon: Wallet, label: 'Categorias', path: '/categories' },
         { icon: null, label: 'Add', path: 'special' }, // Centered button
         { icon: BarChart3, label: 'Gráficos', path: '/charts' },
         { icon: User, label: 'Perfil', path: '/profile' },

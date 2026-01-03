@@ -15,15 +15,13 @@ export default function Dashboard() {
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
     const navigate = useNavigate()
 
-    useEffect(() => {
-        supabase.auth.getUser().then(({ data }: { data: { user: any } }) => {
-            if (!data.user) {
-                navigate('/login')
-            } else {
-                fetchTransactions()
-            }
+    const filterByMonth = (data: any[], month: number, year: number) => {
+        const filtered = data.filter(t => {
+            const date = new Date(t.date)
+            return date.getMonth() === month && date.getFullYear() === year
         })
-    }, [navigate])
+        setTransactions(filtered)
+    }
 
     const fetchTransactions = async () => {
         const { data } = await supabase
@@ -37,13 +35,15 @@ export default function Dashboard() {
         }
     }
 
-    const filterByMonth = (data: any[], month: number, year: number) => {
-        const filtered = data.filter(t => {
-            const date = new Date(t.date)
-            return date.getMonth() === month && date.getFullYear() === year
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data }: { data: { user: any } }) => {
+            if (!data.user) {
+                navigate('/login')
+            } else {
+                fetchTransactions()
+            }
         })
-        setTransactions(filtered)
-    }
+    }, [navigate])
 
     useEffect(() => {
         if (allTransactions.length > 0) {
