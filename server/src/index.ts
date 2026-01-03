@@ -11,7 +11,11 @@ const port = process.env.PORT || 3000
 // Configura origens permitidas para CORS
 const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['http://localhost:5173', 'https://gerenciador-financeiro-steel.vercel.app']
+    : [
+        'http://localhost:5173',
+        'https://gerenciador-financeiro-steel.vercel.app',
+        'https://gerenciador-financeiro-f13j.vercel.app'
+    ]
 
 const app = new Elysia()
     .use(cors({
