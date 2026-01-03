@@ -2,8 +2,8 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { type ThemeProviderProps } from 'next-themes'
 
 /**
- * ThemeProvider component to manage Light, Dark, and OLED themes.
- * Provedor de temas para gerenciar os temas Light, Dark e OLED.
+ * ThemeProvider component to manage Light, Dark, and Pink themes.
+ * Provedor de temas para gerenciar os temas Light, Dark e Pink.
  */
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
     return (
@@ -11,7 +11,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
             attribute="class"
             defaultTheme="system"
             enableSystem
-            themes={['light', 'dark', 'oled']}
+            themes={['light', 'dark', 'pink']}
             {...props}
         >
             {children}

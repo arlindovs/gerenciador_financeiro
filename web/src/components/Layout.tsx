@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Receipt, LogOut, Wallet, Plus, BarChart3, User, Moon, Sun, Monitor } from 'lucide-react'
+import { LayoutDashboard, Receipt, LogOut, Wallet, Plus, BarChart3, User, Moon, Sun, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useNavigate } from 'react-router-dom'
@@ -94,10 +94,10 @@ export default function Layout() {
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => setTheme('oled')}
-                            className={`rounded-xl ${theme === 'oled' ? 'bg-background shadow-sm text-primary' : ''}`}
+                            onClick={() => setTheme('pink')}
+                            className={`rounded-xl ${theme === 'pink' ? 'bg-background shadow-sm text-primary' : ''}`}
                         >
-                            <Monitor className="w-4 h-4" />
+                            <Heart className="w-4 h-4" />
                         </Button>
                     </div>
 
@@ -123,9 +123,9 @@ export default function Layout() {
                         variant="secondary"
                         size="icon"
                         className="rounded-full w-10 h-10 shadow-sm"
-                        onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'oled' : 'light')}
+                        onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'pink' : 'light')}
                     >
-                        {theme === 'light' ? <Sun className="w-5 h-5" /> : theme === 'dark' ? <Moon className="w-5 h-5" /> : <Monitor className="w-5 h-5" />}
+                        {theme === 'light' ? <Sun className="w-5 h-5" /> : theme === 'dark' ? <Moon className="w-5 h-5" /> : <Heart className="w-5 h-5" />}
                     </Button>
                 </div>
             </header>
