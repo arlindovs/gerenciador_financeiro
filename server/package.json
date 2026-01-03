@@ -1,0 +1,20 @@
+{
+  "name": "finance-manager-api",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "latest",
+    "@elysiajs/swagger": "latest",
+    "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "latest",
+    "elysia": "latest",
+    "openai": "^6.15.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
