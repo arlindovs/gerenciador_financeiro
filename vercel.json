@@ -17,6 +17,15 @@
         {
             "source": "/api/:path*",
             "destination": "/server/src/index.ts"
+        },
+        {
+            "source": "/assets/:path*",
+            "destination": "/web/assets/:path*"
+        },
+        {
+            "source": "/((?!api/).*)",
+            "destination": "/web/index.html"
         }
-    ]
+    ],
+    "cleanUrls": true
 }
