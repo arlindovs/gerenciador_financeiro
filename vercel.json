@@ -1,7 +1,10 @@
 {
     "version": 2,
     "functions": {
-        "server/src/index.ts": {}
+        "server/src/index.ts": {
+            "memory": 1024,
+            "maxDuration": 10
+        }
     },
     "rewrites": [
         {
