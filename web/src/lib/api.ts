@@ -1,13 +1,15 @@
 /**
  * API Configuration
- * Configures the base URL for API requests based on environment.
- * Uses VITE_API_URL in production, defaults to localhost:3000 in development.
+ * Configures the base URL for API requests.
+ * Uses relative paths (/api) which work with both:
+ * - Local dev: Vite proxy forwards /api to localhost:3000
+ * - Production: Vercel rewrites /api to the serverless function
  */
 
-// API base URL from environment variable or fallback to localhost for development
-// Em produção, VITE_API_URL deve apontar para o backend (ex: https://gerenciador-financeiro-steel.vercel.app)
-// In production, VITE_API_URL should point to the backend (ex: https://gerenciador-financeiro-steel.vercel.app)
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+// API base URL - uses relative path to avoid CORS issues
+// Em produção e desenvolvimento, sempre usa /api (relativo)
+// In production and development, always uses /api (relative)
+export const API_BASE_URL = '/api'
 
 /**
  * Helper function to build API endpoints
@@ -18,3 +20,4 @@ export const apiUrl = (path: string): string => {
     const cleanPath = path.startsWith('/') ? path : `/${path}`
     return `${API_BASE_URL}${cleanPath}`
 }
+
