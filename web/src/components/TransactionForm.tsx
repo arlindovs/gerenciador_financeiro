@@ -1,11 +1,9 @@
-
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { supabase } from '@/lib/supabase'
-import { Sparkles, Loader2 } from 'lucide-react'
+import { Sparkles, Loader2, Calendar as CalendarIcon, Wallet, Layers, Repeat } from 'lucide-react'
 
 interface TransactionFormProps {
     onSuccess: () => void
@@ -31,11 +29,9 @@ export default function TransactionForm({ onSuccess, user_id, initialData }: Tra
         const { data } = await supabase.from('categories').select('*').eq('type', type)
         if (data) {
             setCategoryList(data)
-            if (data.length > 0 && !categoryId) setCategoryId(data[0].id)
-            // If we are editing, ensure the category from initialData is kept if it matches the current type
             if (initialData?.category_id && data.find(c => c.id === initialData.category_id)) {
                 setCategoryId(initialData.category_id)
-            } else if (data.length > 0 && !categoryId) {
+            } else if (data.length > 0) {
                 setCategoryId(data[0].id)
             }
         }
@@ -46,11 +42,7 @@ export default function TransactionForm({ onSuccess, user_id, initialData }: Tra
     }, [type])
 
     const handleSuggestCategory = async () => {
-        if (!description || !amount) {
-            alert('Por favor, preencha a descrição e o valor primeiro.')
-            return
-        }
-
+        if (!description || !amount) return
         setSuggesting(true)
         try {
             const { data: { session } } = await supabase.auth.getSession()
@@ -63,16 +55,9 @@ export default function TransactionForm({ onSuccess, user_id, initialData }: Tra
                 body: JSON.stringify({ description, amount: parseFloat(amount) })
             })
 
-            if (!res.ok) throw new Error('Failed to fetch suggestion')
             const data = await res.json()
-
-            // Try to find the suggested category in our list
             const found = categoryList.find(c => c.name.toLowerCase() === data.category.toLowerCase())
-            if (found) {
-                setCategoryId(found.id)
-            } else {
-                console.log('Suggested category not found in list:', data.category)
-            }
+            if (found) setCategoryId(found.id)
         } catch (err) {
             console.error('AI Suggestion error:', err)
         } finally {
@@ -83,7 +68,6 @@ export default function TransactionForm({ onSuccess, user_id, initialData }: Tra
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
-
         try {
             const { data: { session } } = await supabase.auth.getSession()
             const isEditing = !!initialData?.id
@@ -110,129 +94,171 @@ export default function TransactionForm({ onSuccess, user_id, initialData }: Tra
             })
 
             if (!res.ok) throw new Error('Failed to save')
-
-            if (!isEditing) {
-                setDescription('')
-                setAmount('')
-                setInstallments('1')
-                setIsRecurring(false)
-            }
             onSuccess()
         } catch (err) {
             console.error(err)
-            alert('Erro ao salvar transação')
         } finally {
             setLoading(false)
         }
     }
 
     return (
-        <Card className="mb-6 border-2 border-primary/10 shadow-lg">
-            <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-bold">Nova Transação</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="flex p-1 bg-muted rounded-lg gap-1">
-                        <Button
-                            type="button"
-                            variant={type === 'income' ? 'default' : 'ghost'}
-                            onClick={() => setType('income')}
-                            className="flex-1 transition-all rounded-md"
-                        >
-                            Receita
-                        </Button>
-                        <Button
-                            type="button"
-                            variant={type === 'expense' ? 'default' : 'ghost'}
-                            onClick={() => setType('expense')}
-                            className="flex-1 transition-all rounded-md"
-                        >
-                            Despesa
-                        </Button>
-                    </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Type Toggle */}
+            <div className="flex p-1.5 bg-muted/50 backdrop-blur-md rounded-[2rem] gap-1 border border-border/50">
+                <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setType('income')}
+                    className={`flex-1 h-12 rounded-[1.5rem] font-black text-xs uppercase tracking-widest transition-all duration-300 ${type === 'income' ? 'bg-revenue text-white shadow-xl scale-100' : 'text-muted-foreground opacity-50 scale-95'
+                        }`}
+                >
+                    Receita
+                </Button>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setType('expense')}
+                    className={`flex-1 h-12 rounded-[1.5rem] font-black text-xs uppercase tracking-widest transition-all duration-300 ${type === 'expense' ? 'bg-expense text-white shadow-xl scale-100' : 'text-muted-foreground opacity-50 scale-95'
+                        }`}
+                >
+                    Despesa
+                </Button>
+            </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="desc">Descrição</Label>
+            <div className="space-y-6">
+                {/* Description */}
+                <div className="space-y-3">
+                    <Label htmlFor="desc" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">O que foi?</Label>
+                    <div className="relative group">
+                        <Input
+                            id="desc"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                            placeholder="Aluguel, Madero, Salário..."
+                            className="h-16 px-6 bg-background/50 border-border/50 rounded-[1.5rem] text-xl font-bold focus-visible:ring-primary/20 transition-all"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleSuggestCategory}
+                            disabled={suggesting}
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 transition-all ${suggesting ? 'animate-pulse' : ''}`}
+                            title="Sugerir categoria com IA"
+                        >
+                            {suggesting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Amount & Date */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                        <Label htmlFor="amount" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Quanto?</Label>
                         <div className="relative">
+                            <span className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground font-black text-lg">R$</span>
                             <Input
-                                id="desc"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                id="amount"
+                                type="number"
+                                step="0.01"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
                                 required
-                                placeholder="Ex: Almoço no Madero"
-                                className="pr-10"
+                                className="h-16 pl-14 pr-6 bg-background/50 border-border/50 rounded-[1.5rem] text-2xl font-black focus-visible:ring-primary/20"
                             />
-                            <button
-                                type="button"
-                                onClick={handleSuggestCategory}
-                                disabled={suggesting}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 disabled:opacity-50 transition-colors"
-                                title="Sugerir categoria com IA"
-                            >
-                                {suggesting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-                            </button>
                         </div>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="amount">Valor Total</Label>
-                            <Input id="amount" type="number" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} required placeholder="0,00" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="date">Data</Label>
-                            <Input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                    <div className="space-y-3">
+                        <Label htmlFor="date" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Quando?</Label>
+                        <div className="relative">
+                            <CalendarIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5 pointer-events-none" />
+                            <Input
+                                id="date"
+                                type="date"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                required
+                                className="h-16 pl-14 pr-6 bg-background/50 border-border/50 rounded-[1.5rem] font-bold focus-visible:ring-primary/20"
+                            />
                         </div>
                     </div>
+                </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="category">Categoria</Label>
+                {/* Category Selection - Custom styled select */}
+                <div className="space-y-3">
+                    <Label htmlFor="category" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Categoria</Label>
+                    <div className="relative">
+                        <Wallet className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5 pointer-events-none" />
                         <select
                             id="category"
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            className="flex h-16 w-full rounded-[1.5rem] border border-border/50 bg-background/50 pl-16 pr-6 py-2 text-lg font-bold ring-offset-background focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer"
                             value={categoryId}
                             onChange={(e) => setCategoryId(e.target.value)}
                             required
                         >
-                            {categoryList.map(c => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
+                            {categoryList.map(c => <option key={c.id} value={c.id} className="text-foreground">{c.icon} {c.name}</option>)}
                         </select>
+                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                            <Layers className="w-4 h-4" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Advanced: Recurrence & Installments */}
+                <div className="p-6 bg-muted/30 rounded-[2rem] border border-border/50 space-y-6">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-xl transition-colors ${isRecurring ? 'bg-primary/20 text-primary' : 'bg-background/50 text-muted-foreground'}`}>
+                                <Repeat className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-black">Repetir todo mês</p>
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Lançamento fixo</p>
+                            </div>
+                        </div>
+                        <input
+                            type="checkbox"
+                            checked={isRecurring}
+                            onChange={(e) => setIsRecurring(e.target.checked)}
+                            className="h-6 w-6 rounded-lg border-border bg-background checked:bg-primary transition-all cursor-pointer"
+                        />
                     </div>
 
-                    <div className="flex items-center gap-6 pt-2">
-                        <div className="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                id="recurring"
-                                checked={isRecurring}
-                                onChange={(e) => setIsRecurring(e.target.checked)}
-                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                            />
-                            <Label htmlFor="recurring" className="cursor-pointer">Repetir todo mês</Label>
-                        </div>
-
-                        {type === 'expense' && (
-                            <div className="flex items-center space-x-2 flex-1">
-                                <Label htmlFor="installments">Parcelas:</Label>
+                    {type === 'expense' && !isRecurring && (
+                        <div className="pt-4 border-t border-border/50 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 rounded-xl bg-background/50 text-muted-foreground">
+                                    <Layers className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-black">Parcelamento</p>
+                                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Dividir em vezes</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-black text-muted-foreground uppercase italic px-2">x</span>
                                 <Input
-                                    id="installments"
                                     type="number"
                                     min="1"
                                     max="48"
                                     value={installments}
                                     onChange={(e) => setInstallments(e.target.value)}
-                                    className="w-20 h-8"
+                                    className="w-20 h-10 rounded-xl bg-background border-border/50 text-center font-black"
                                 />
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
+                </div>
+            </div>
 
-                    <Button type="submit" className="w-full mt-4 font-bold h-11" disabled={loading}>
-                        {loading ? 'Processando...' : 'Salvar Lançamento'}
-                    </Button>
-                </form>
-            </CardContent>
-        </Card>
+            <Button
+                type="submit"
+                className="w-full h-16 rounded-[1.5rem] font-black text-lg shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                disabled={loading}
+            >
+                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Confirmar Lançamento'}
+            </Button>
+        </form>
     )
 }
 

@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils"
 const Dialog = ({ children, open, onOpenChange }: { children: React.ReactNode, open: boolean, onOpenChange: (open: boolean) => void }) => {
     if (!open) return null
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => onOpenChange(false)} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={() => onOpenChange(false)} />
             <div className="relative z-50 w-full max-w-lg scale-in-center animate-in fade-in duration-200">
                 {children}
             </div>
@@ -16,7 +16,7 @@ const Dialog = ({ children, open, onOpenChange }: { children: React.ReactNode, o
 }
 
 const DialogContent = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={cn("bg-white rounded-xl shadow-2xl overflow-hidden border border-border/50 p-6", className)}>
+    <div className={cn("bg-card rounded-xl shadow-2xl overflow-hidden border border-border/50 p-6", className)}>
         {children}
     </div>
 )

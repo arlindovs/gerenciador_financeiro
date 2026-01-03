@@ -10,6 +10,8 @@ export default {
             colors: {
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
+                revenue: 'hsl(var(--revenue))',
+                expense: 'hsl(var(--expense))',
                 card: {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))'
