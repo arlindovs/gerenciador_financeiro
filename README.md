@@ -1,6 +1,6 @@
 # 💰 Gerenciador Financeiro (Finance Manager)
 
-Um sistema de gestão financeira moderno, de alto desempenho e impulsionado por IA, construído com **Bun**, **ElysiaJS** e **React 19**.
+Um sistema de gestão financeira moderno, de alto desempenho e impulsionado por IA, construído com **Node.js**, **Express** e **React 19**.
 
 ---
 
@@ -33,11 +33,14 @@ Este projeto é uma solução abrangente de gestão financeira projetada para ve
 - **React Hook Form** + **Zod** (Validação robusta)
 
 ### Backend
-- **Bun** (Runtime & Gerenciador de Pacotes)
-- **ElysiaJS** (Framework web rápido e amigável)
+- **Node.js** (Runtime JavaScript)
+- **Express** (Framework web robusto)
+- **TypeScript** (Tipagem estática)
+- **Zod** (Validação de schemas)
 - **Supabase** (PostgreSQL & Realtime)
 - **Google Gemini AI** (Integração com IA Generativa)
 - **Swagger/OpenAPI** (Documentação automatizada)
+- **Helmet** (Security headers)
 
 ---
 
@@ -46,10 +49,12 @@ Este projeto é uma solução abrangente de gestão financeira projetada para ve
 ```text
 gerenciador_financeiro/
 ├── database/         # Schemas do banco de dados (SQL)
-├── server/           # Backend API (ElysiaJS + Bun)
+├── server/           # Backend API (Node.js + Express)
 │   ├── src/
+│   │   ├── lib/      # Supabase client, Zod schemas
 │   │   ├── routes/   # Endpoints da API
-│   │   └── index.ts  # Ponto de entrada
+│   │   ├── swagger.ts # OpenAPI config
+│   │   └── index.ts  # Ponto de entrada Express
 ├── web/              # Frontend (React 19 + Vite)
 │   ├── src/
 │   │   ├── components/
@@ -61,7 +66,7 @@ gerenciador_financeiro/
 ## ⚙️ Configuração e Instalação
 
 ### Pré-requisitos
-- [Bun](https://bun.sh/) instalado.
+- [Node.js](https://nodejs.org/) v18+ instalado.
 - Projeto no Supabase (Database URL & Anon Key).
 - Chave de API do Google Gemini.
 
@@ -72,17 +77,18 @@ gerenciador_financeiro/
    ```
 2. Instale as dependências:
    ```bash
-   bun install
+   npm install
    ```
 3. Crie um arquivo `.env` baseado no `.env.example`:
    ```env
    SUPABASE_URL=sua_url
-   SUPABASE_KEY=sua_chave
+   SUPABASE_ANON_KEY=sua_chave
    GEMINI_API_KEY=sua_chave_gemini
+   PORT=3000
    ```
 4. Inicie o servidor de desenvolvimento:
    ```bash
-   bun dev
+   npm run dev
    ```
 
 ### Configuração do Frontend
@@ -92,16 +98,17 @@ gerenciador_financeiro/
    ```
 2. Instale as dependências:
    ```bash
-   bun install
+   npm install
    ```
 3. Crie um arquivo `.env`:
    ```env
    VITE_SUPABASE_URL=sua_url
    VITE_SUPABASE_ANON_KEY=sua_chave
+   VITE_API_URL=http://localhost:3000
    ```
 4. Inicie o servidor de desenvolvimento:
    ```bash
-   bun dev
+   npm run dev
    ```
 
 ---
@@ -111,7 +118,7 @@ gerenciador_financeiro/
 ### Build do Frontend
 ```bash
 cd web
-bun run build
+npm run build
 ```
 Os arquivos estáticos serão gerados em `web/dist/`.
 
@@ -121,28 +128,30 @@ Os arquivos estáticos serão gerados em `web/dist/`.
 | Plataforma | Comando/Configuração |
 |------------|---------------------|
 | **Vercel** | `vercel --prod` |
-| **Netlify** | Conectar repo, build: `bun run build`, dir: `dist` |
-| **Cloudflare Pages** | Build: `bun run build`, output: `dist` |
+| **Netlify** | Conectar repo, build: `npm run build`, dir: `dist` |
+| **Cloudflare Pages** | Build: `npm run build`, output: `dist` |
 
-#### Backend (ElysiaJS + Bun)
+#### Backend (Node.js + Express)
 | Plataforma | Configuração |
 |------------|--------------|
-| **Railway** | Runtime: Bun, Start: `bun start` |
-| **Render** | Runtime: Docker, Dockerfile com Bun |
+| **Railway** | Runtime: Node.js, Start: `npm start` |
+| **Render** | Runtime: Node.js ou Docker |
 | **Fly.io** | `fly launch` com Dockerfile |
 | **VPS (Docker)** | Ver Dockerfile abaixo |
 
 ### Dockerfile para Backend
 ```dockerfile
-FROM oven/bun:latest
+FROM node:20-alpine
 WORKDIR /app
-COPY server/package.json server/bun.lock* ./
-RUN bun install --frozen-lockfile
-COPY server/ .
+COPY server/package*.json ./
+RUN npm ci --only=production
+COPY server/dist ./dist
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["bun", "run", "start"]
+CMD ["node", "dist/index.js"]
 ```
+
+
 
 ### Variáveis de Ambiente (Produção)
 
